@@ -23,15 +23,32 @@ package helloworld;
 // The greeting service definition.
 service Greeter {
   // Sends a greeting
-  rpc SayHello (HelloRequest) returns (HelloReply) {}
+  rpc SayHello(HelloRequest) returns (HelloReply) {}
+}
+
+enum DelegationMode {
+  SHARED = 0;
+  EXCLUSIVE = 1;
+}
+
+message Delegation {
+  uint64 id = 1;
+  DelegationMode mode = 2;
+}
+
+message ObjectHandle {
+  uint32 dsid = 1;
+  uint64 oid = 2;
+  uint64 gen = 3;
 }
 
 // The request message containing the user's name.
 message HelloRequest {
-  string name = 1;
+  Delegation obj_hdl = 1;
+  Delegation delegation = 2;
+  uint64 offset = 3;
+  uint64 size = 4;
 }
 
 // The response message containing the greetings
-message HelloReply {
-  string message = 1;
-}
+message HelloReply { bytes buf = 1; }
